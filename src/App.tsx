@@ -1,5 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {Button} from '@mui/material';
 
 function App() {
     return (
@@ -22,4 +23,11 @@ function App() {
     );
 }
 
+function MyApp() {
+  return (
+    <Button variant="outlined">Click me!</Button>
+  );
+}
+
 export default App;
+export {MyApp}

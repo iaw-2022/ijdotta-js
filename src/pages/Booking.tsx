@@ -7,28 +7,31 @@ import BookAppointmentStepper from '../components/BookAppointmentStepper/BookApp
 
 function Booking(): JSX.Element {
 
-    const [clicked, setClick] = useState(false);
-    const [patientFound, setPatientFound] = useState(false);
+  const [patientId, setPatientId] = useState<number>(NaN);
+  const [step, setStep] = useState(0);
   
-    const onClickToggle = async (id: bigint) => {
-      setClick(!clicked)
-      const pFound = await model.checkPatientExists(id)
-      setPatientFound(pFound)
-    }
-  
-    const handleContinueClick = () => {
-      
-    }
+  const handleNextClick = () => {
+    setStep((prevStep) => prevStep + 1)
+  }
 
-    return (
-        <Container>
-          <BookAppointmentStepper></BookAppointmentStepper>
-      <PatientLookUp submitPatientId={onClickToggle} patientFound={patientFound} handleContinueClick={handleContinueClick}/>
-      <CreatePatientForm></CreatePatientForm>
-      <p>Button has been clicked: {clicked? "true" : "false"}</p>
-      <p>{`Patient was ${patientFound? "" : "not"} found`}</p>
+  const patientLookUpProps = {
+    handleNextClick,
+    submitPatientId: (id: number) => {
+      setPatientId(id)
+    }
+  }
+
+  const createPatientFormProps = {
+    patientId,
+    handleNextClick,
+  }
+
+  return (
+    <Container sx={{}}>
+      {step === 0 && <PatientLookUp {...patientLookUpProps}/>}
+      {step === 1 && <CreatePatientForm {...createPatientFormProps} />}
     </Container>
-    );
+  );
 }
 
 export default Booking;

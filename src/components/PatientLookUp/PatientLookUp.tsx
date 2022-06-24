@@ -4,29 +4,38 @@ import {
     CardContent,
     Typography,
     Button,
-    Box,
+    CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useState } from "react";
 import "./PatientLookUp.css";
+import model from "../../model/model";
 
 interface Props {
-    submitPatientId: (id: bigint) => void;
-    patientFound: boolean;
-    handleContinueClick: () => void;
+    submitPatientId: (id: number) => void;
+    handleNextClick: () => void;
 }
 
 const ID_LABEL = "DNI";
 
 function PatientLookUp(props: Props): JSX.Element {
     const [idTextField, setIdTextField] = useState<string>("");
+    const [patientFound, setPatientFound] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const updateIdTextField = (event: ChangeEvent<HTMLInputElement>) => {
         setIdTextField(event.target.value);
     };
 
-    const onSearchClick = () => {
-        props.submitPatientId(BigInt(idTextField));
+    const onSearchClick = async () => {
+        setIsLoading(true);
+
+        const patientId = Number(idTextField);
+        props.submitPatientId(patientId);
+        const findPatientResult = await model.checkPatientExists(patientId);
+        setPatientFound(findPatientResult);
+
+        setIsLoading(false);
     };
 
     return (
@@ -45,18 +54,22 @@ function PatientLookUp(props: Props): JSX.Element {
                         value={idTextField}
                     />
                     <Button onClick={onSearchClick}>
-                        <SearchIcon />
+                        {!isLoading ? <SearchIcon /> : <CircularProgress />}
                     </Button>
                 </CardContent>
                 <CardContent className="main-content">
                     <Typography>
-                        {props.patientFound
+                        {patientFound
                             ? "Patient found! Continue to book an appointment."
                             : "Patient was not found. Continue to load personal information."}
                     </Typography>
                 </CardContent>
                 <CardContent className="flex-end">
-                    <Button variant="contained" onClick={props.handleContinueClick}>
+                    <Button
+                        variant="contained"
+                        disabled={isLoading ? true : false}
+                        onClick={props.handleNextClick}
+                    >
                         Continue
                     </Button>
                 </CardContent>

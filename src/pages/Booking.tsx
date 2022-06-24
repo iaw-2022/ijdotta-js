@@ -1,6 +1,7 @@
 import {Container} from '@mui/material'
 import PatientLookUp from '../components/PatientLookUp/PatientLookUp';
 import CreatePatientForm from '../components/CreatePatientForm/CreatePatientForm';
+import SomeForm from '../components/CreatePatientForm/SomeForm';
 import { useState } from 'react';
 import model from '../model/model';
 import BookAppointmentStepper from '../components/BookAppointmentStepper/BookAppointmentStepper'
@@ -30,6 +31,7 @@ function Booking(): JSX.Element {
     <Container sx={{}}>
       {step === 0 && <PatientLookUp {...patientLookUpProps}/>}
       {step === 1 && <CreatePatientForm {...createPatientFormProps} />}
+      {/* <SomeForm></SomeForm> */}
     </Container>
   );
 }

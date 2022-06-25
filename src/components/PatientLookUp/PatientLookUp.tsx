@@ -22,6 +22,7 @@ function PatientLookUp(props: Props): JSX.Element {
     const [idTextField, setIdTextField] = useState<string>("");
     const [patientFound, setPatientFound] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [hasClickedSearch, setHasClickedSearch] = useState(false);
 
     const updateIdTextField = (event: ChangeEvent<HTMLInputElement>) => {
         setIdTextField(event.target.value);
@@ -29,6 +30,7 @@ function PatientLookUp(props: Props): JSX.Element {
 
     const onSearchClick = async () => {
         setIsLoading(true);
+        setHasClickedSearch(true);
 
         const patientId = Number(idTextField);
         props.submitPatientId(patientId);
@@ -67,7 +69,7 @@ function PatientLookUp(props: Props): JSX.Element {
                 <CardContent className="flex-end">
                     <Button
                         variant="contained"
-                        disabled={isLoading ? true : false}
+                        disabled={isLoading || !hasClickedSearch}
                         onClick={props.handleNextClick}
                     >
                         Continue

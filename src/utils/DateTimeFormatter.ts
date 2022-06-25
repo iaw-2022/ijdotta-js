@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
+
 class DateTimeFormatter {
     formatDate(date: Date): string {
-        return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+        return dayjs(date).format("DD/MM/YYYY");
     }
 
     formatTime(date: Date): string {
-        return `${date.getHours()}:${date.getMinutes()} hs`;
+        return dayjs(date).format("HH:mm [hs]")
     }
 }
 

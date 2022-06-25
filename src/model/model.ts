@@ -1,6 +1,7 @@
 import { Doctor } from "../types/doctors";
 import { Patient } from "../types/patient";
 import { Appointment } from "../types/appointments";
+import ClinicAPI from './services/ClinicAPI'
 
 interface Model {
     checkPatientExists: (id: number) => Promise<boolean>;
@@ -33,24 +34,12 @@ class ModelImpl implements Model {
     }
 
     async getDoctors(): Promise<Array<Doctor>> {
-        return [
-            {
-                id: 123123,
-                name: "Julius",
-                lastname: "Hibbert",
-            },
-            {
-                id: 969696,
-                name: "Pedro",
-                lastname: "Picapiedra",
-            },
-
-            {
-                id: 125467,
-                name: "Nick",
-                lastname: "Riviera",
-            },
-        ];
+        try {
+            return await ClinicAPI.getDoctors();
+        } catch (error) {
+            console.error(error)
+            return []
+        }
     }
 
     async getAppointments(
@@ -58,21 +47,22 @@ class ModelImpl implements Model {
         from: Date | undefined = undefined,
         to: Date | undefined = undefined
     ): Promise<Array<Appointment>> {
-        await delay(2000)
-        return [
-            {
-                id: 1,
-                doctor_id: 123123,
-                date: new Date(),
-                initial_time: new Date(),
-                end_time: new Date(),
-            },
-        ];
+        try {
+            return await ClinicAPI.getAppointments(doctor?.id, from, to);
+        } catch (error: any) {
+            console.error(error);
+            return [];
+        }
     }
 
-    async bookAppointment(patientId: number, appointmentId: number): Promise<Boolean> {
-        await delay(2000)
-        return true
+    async bookAppointment(patientId: number, appointmentId: number): Promise<boolean> {
+        try {
+            await ClinicAPI.bookAppointment(patientId, appointmentId);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 }
 

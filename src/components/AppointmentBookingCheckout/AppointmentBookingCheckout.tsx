@@ -9,6 +9,7 @@ import {
     Paper,
     Typography,
     Grid,
+    Alert,
 } from "@mui/material";
 import dateTimeFormater from "../../utils/DateTimeFormatter";
 
@@ -52,10 +53,12 @@ function AppointmentsBookingCheckout({
 }: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [hasConfirmed, setHasConfirmed] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const onConfirmClick = async () => {
         setIsLoading(true);
-        await model.bookAppointment(patientId, appointment.id);
+        const result = await model.bookAppointment(patientId, appointment.id);
+        setSuccess(result);
         setIsLoading(false);
         setHasConfirmed(true);
     };
@@ -75,6 +78,16 @@ function AppointmentsBookingCheckout({
                 <Typography>Checkout</Typography>
                 <Box display={"inline-block"} alignSelf="center" pb="20px">
                     <Paper elevation={5}>
+                        {hasConfirmed && success && (
+                            <Alert severity="success">
+                                Appointment successfully booked.
+                            </Alert>
+                        )}
+                        {hasConfirmed && !success && (
+                            <Alert severity="error">
+                                An error has occured. Try again later.
+                            </Alert>
+                        )}
                         <Box padding={"20px"}>
                             <Typography>
                                 This is the reservation information:

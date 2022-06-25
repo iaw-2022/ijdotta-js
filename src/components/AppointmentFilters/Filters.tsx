@@ -20,8 +20,8 @@ interface Props {
 
 interface Values {
     doctor: number;
-    from: Date;
-    to: Date;
+    from: any;
+    to: any;
 }
 
 const ANY_DOCTOR: Doctor = {
@@ -60,8 +60,8 @@ function Filters({ setTo, setFrom, setDoctor, isLoading, setIsLoading }: Props):
         }, 500);
         const doctor = doctors.find((doc) => doc.id === values.doctor);
         if (doctor) setDoctor(doctor);
-        setFrom(values.from);
-        setTo(values.to);
+        values.from && setFrom(values.from);
+        values.to && setTo(values.to);
     };
 
     const formik = useFormik({

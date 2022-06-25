@@ -10,6 +10,7 @@ import {
     Card,
     Box,
 } from "@mui/material";
+import dateTimeFormatter from '../../utils/DateTimeFormatter'
 
 interface Props {
     handleNextClick: () => void;
@@ -17,22 +18,20 @@ interface Props {
 }
 
 const NONE_APPOINTMENT: Appointment = {
-    id: 0,
+    id: 999999,
     doctor_id: 0,
     date: new Date(),
     initial_time: new Date(),
     end_time: new Date(),
 };
 
-const formatDate = (date: Date) =>
-    `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
-
-const formatTime = (date: Date) => `${date.getHours()}:${date.getMinutes()} hs`;
-
-const getSelectLabel = ({ id, date, initial_time, doctor_id }: Appointment) =>
-    id === 0
+const getSelectLabel = ({ id, date, initial_time, doctor_id }: Appointment) => {
+    const safeDate = new Date(date);
+    const safeTime = new Date(initial_time);
+    return id === 0
         ? `Select an appointment`
-        : `${formatDate(date)}, ${formatTime(initial_time)}, ${doctor_id}.`;
+        : `${dateTimeFormatter.formatDate(safeDate)}, ${dateTimeFormatter.formatTime(safeTime)}, ${doctor_id}.`;
+}
 
 function AppointmentsBookingCalendar({ handleNextClick, setAppointment }: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
@@ -49,21 +48,19 @@ function AppointmentsBookingCalendar({ handleNextClick, setAppointment }: Props)
 
     useEffect(() => {
         setIsLoading(true);
-        setIsLoading(true);
         model.getAppointments(doctor, from, to).then((appointments) => {
+            console.log(appointments)
             setAppointments([...appointments, NONE_APPOINTMENT]);
             setIsLoading(false);
         });
     }, [doctor, from, to]);
-
-    console.log(appointments);
 
     const handleAppointmentSelect = ({
         target,
     }: ChangeEvent<HTMLInputElement>) => {
         const targetId = Number(target.value);
         setSelectedAppointment(
-            appointments.find(({ id }) => id === targetId) || NONE_APPOINTMENT
+            appointments.find(({ id }) => id - targetId === 0) || NONE_APPOINTMENT
         );
     };
 

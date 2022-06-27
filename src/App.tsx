@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Booking from "./pages/Booking";
 import Appointments from './pages/Appointments'
+import Treatments from "./pages/Treatments";
 import { useState } from "react";
 import { Patient } from "./types/patient";
 
@@ -29,6 +30,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/booking" element={<Booking />} />
                     <Route path="/appointments" element={<Appointments patient={patient}/>} />
+                    <Route path="/treatments" element={<Treatments patient={patient}/>} />
                 </Routes>
             </BrowserRouter>
         </>

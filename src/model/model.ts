@@ -3,6 +3,7 @@ import { Patient } from "../types/patient";
 import { Appointment } from "../types/appointments";
 import ClinicAPI from "./services/ClinicAPI";
 import dayjs from "dayjs";
+import { TreatmentsPerDate } from "../types/treatments";
 
 interface Model {
     checkPatientExists: (id: number) => Promise<boolean>;
@@ -103,6 +104,37 @@ class ModelImpl implements Model {
 
     canCancel(appointment: Appointment): boolean {
         return dayjs().isBefore(appointment.date, "day");
+    }
+
+    async getPatientTreatments(patientId: number): Promise<Array<TreatmentsPerDate>> {
+        return [
+            {
+                date: new Date(),
+                treatments: [
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                ]
+            },
+            {
+                date: dayjs().subtract(25, 'days').toDate(),
+                treatments: [
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                ]
+            },
+            {
+                date: dayjs().subtract(3, 'months').toDate(),
+                treatments: [
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                    {title: "This is a treatment", description: "You should sleep"},
+                ]
+            },
+        ];
     }
 }
 

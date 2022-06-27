@@ -18,7 +18,7 @@ interface Props {
 }
 
 const NONE_APPOINTMENT: Appointment = {
-    id: 999999,
+    id: 0,
     doctor_id: 0,
     date: new Date(),
     initial_time: new Date(),

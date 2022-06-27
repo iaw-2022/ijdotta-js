@@ -28,6 +28,9 @@ const delay = (ms: number) => {
 };
 
 class ModelImpl implements Model {
+
+    private doctors : Array<Doctor> | undefined
+
     async checkPatientExists(id: number): Promise<boolean> {
         bool = !bool;
         await delay(500);
@@ -44,7 +47,9 @@ class ModelImpl implements Model {
 
     async getDoctors(): Promise<Array<Doctor>> {
         try {
-            return await ClinicAPI.getDoctors();
+            if (this.doctors === undefined)
+                this.doctors = await ClinicAPI.getDoctors();
+            return this.doctors
         } catch (error) {
             console.error(error);
             return [];

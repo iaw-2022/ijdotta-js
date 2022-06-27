@@ -34,7 +34,7 @@ const getInfoRow = (label: string, value: string | number) => {
 
 const renderAppointmentInfo = (
     patientId: number,
-    { date, initial_time, doctor_id }: Appointment
+    { date, initial_time, doctor_id }: Appointment,
 ) => {
     return (
         <>

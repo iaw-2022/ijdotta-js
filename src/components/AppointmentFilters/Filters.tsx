@@ -54,14 +54,11 @@ function Filters({ setTo, setFrom, setDoctor, isLoading, setIsLoading }: Props):
         values: Values,
         { setSubmitting }: FormikHelpers<Values>
     ) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-        }, 500);
         const doctor = doctors.find((doc) => doc.id === values.doctor);
         if (doctor) setDoctor(doctor);
         values.from && setFrom(values.from);
         values.to && setTo(values.to);
+        setSubmitting(false);
     };
 
     const formik = useFormik({

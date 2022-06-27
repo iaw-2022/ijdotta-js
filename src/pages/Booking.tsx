@@ -23,8 +23,8 @@ function Booking(): JSX.Element {
 
     const handleNextClick = () => {
         step === 0 && patientFound
-            ? setStep((prevStep) => prevStep + 2)   // skip create patient
-            : setStep((prevStep) => prevStep + 1);  
+            ? setStep((prevStep) => prevStep + 2) // skip create patient
+            : setStep((prevStep) => prevStep + 1);
     };
 
     const patientLookUpProps = {
@@ -33,7 +33,7 @@ function Booking(): JSX.Element {
             setPatientId(id);
         },
         patientFound,
-        setPatientFound
+        setPatientFound,
     };
 
     const createPatientFormProps = {
@@ -54,7 +54,7 @@ function Booking(): JSX.Element {
     };
 
     return (
-        <Container sx={{py: "20px"}}>
+        <Container sx={{ py: "20px" }}>
             {step === 0 && <PatientLookUp {...patientLookUpProps} />}
             {step === 1 && <CreatePatientForm {...createPatientFormProps} />}
             {step === 2 && (

@@ -30,12 +30,16 @@ const delay = (ms: number) => {
 class ModelImpl implements Model {
     async checkPatientExists(id: number): Promise<boolean> {
         bool = !bool;
-        await delay(5000);
+        await delay(500);
         return bool;
     }
 
     async createPatient(patient: Patient): Promise<boolean> {
-        return true;
+        try {
+            return await ClinicAPI.createPatient(patient)
+        } catch (error) {
+            return false;
+        }
     }
 
     async getDoctors(): Promise<Array<Doctor>> {

@@ -18,12 +18,13 @@ function Booking(): JSX.Element {
     const [patientId, setPatientId] = useState<number>(NaN);
     const [appointment, setAppointment] =
         useState<Appointment>(NONE_APPOINTMENT);
+    const [patientFound, setPatientFound] = useState<boolean>(false);
     const [step, setStep] = useState(0);
 
     const handleNextClick = () => {
-        step === 0 && !isNaN(patientId)
-            ? setStep((prevStep) => prevStep + 2)
-            : setStep((prevStep) => prevStep + 1);
+        step === 0 && patientFound
+            ? setStep((prevStep) => prevStep + 2)   // skip create patient
+            : setStep((prevStep) => prevStep + 1);  
     };
 
     const patientLookUpProps = {
@@ -31,11 +32,14 @@ function Booking(): JSX.Element {
         submitPatientId: (id: number) => {
             setPatientId(id);
         },
+        patientFound,
+        setPatientFound
     };
 
     const createPatientFormProps = {
         patientId,
         handleNextClick,
+        setPatientId,
     };
 
     const appointmentBookingCalendarProps = {

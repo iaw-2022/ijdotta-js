@@ -23,7 +23,7 @@ const getInfoRow = (label: string, value: string | number) => {
     return (
         <>
             <Grid item xs={6}>
-                <Typography>{label}</Typography>
+                <Typography variant="overline">{label}</Typography>
             </Grid>
             <Grid item xs={6}>
                 <Typography>{value}</Typography>
@@ -75,8 +75,8 @@ function AppointmentsBookingCheckout({
                 alignItems={"baseline"}
                 padding="20px"
             >
-                <Typography>Checkout</Typography>
-                <Box display={"inline-block"} alignSelf="center" pb="20px">
+                <Typography variant="h5">Checkout</Typography>
+                <Box display={"inline-block"} alignSelf="center" my="20px">
                     <Paper elevation={5}>
                         {hasConfirmed && success && (
                             <Alert severity="success">
@@ -88,8 +88,8 @@ function AppointmentsBookingCheckout({
                                 An error has occured. Try again later.
                             </Alert>
                         )}
-                        <Box padding={"20px"}>
-                            <Typography>
+                        <Box padding={"20px"} display="flex" flexDirection={"column"} rowGap={"20px"}>
+                            <Typography variant="h6">
                                 This is the reservation information:
                             </Typography>
                             <Grid container spacing={2}>

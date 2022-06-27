@@ -15,13 +15,14 @@ import model from "../../model/model";
 interface Props {
     submitPatientId: (id: number) => void;
     handleNextClick: () => void;
+    patientFound: boolean;
+    setPatientFound: (bool: boolean) => void
 }
 
 const ID_LABEL = "DNI";
 
-function PatientLookUp(props: Props): JSX.Element {
+function PatientLookUp({patientFound, setPatientFound, ...props}: Props): JSX.Element {
     const [idTextField, setIdTextField] = useState<string>("");
-    const [patientFound, setPatientFound] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hasClickedSearch, setHasClickedSearch] = useState(false);
 
@@ -35,9 +36,10 @@ function PatientLookUp(props: Props): JSX.Element {
         setHasClickedSearch(true);
 
         const patientId = Number(idTextField);
-        props.submitPatientId(patientId);
         const findPatientResult = await model.checkPatientExists(patientId);
         setPatientFound(findPatientResult);
+        props.submitPatientId(patientFound ? patientId : NaN);
+
 
         setIsLoading(false);
     };

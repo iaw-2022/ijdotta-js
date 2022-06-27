@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import CONFIG from "../../config";
 import { Appointment } from "../../types/appointments";
 import { Doctor } from "../../types/doctors";
+import { Patient } from "../../types/patient";
 
 const APIClient = axios.create({
     baseURL: CONFIG.SERVICES.CLINIC_API.BASE_URL,
@@ -43,12 +44,12 @@ class ClinicService {
         from && (params.from = from);
         to && (params.to = to);
 
-        console.log("params: ")
-        console.log(params)
+        console.log("params: ");
+        console.log(params);
 
         try {
             const response = await APIClient.get(url, { params });
-            console.log(response.data)
+            console.log(response.data);
             return response.data;
         } catch (error: any) {
             throw buildError(error);
@@ -57,7 +58,7 @@ class ClinicService {
 
     async bookAppointment(
         patient_id: number,
-        id: number,
+        id: number
     ): Promise<Appointment> {
         const url = `/appointments/${id}`;
 
@@ -67,6 +68,18 @@ class ClinicService {
 
         try {
             const response = await APIClient.put(url, data);
+            return response.data;
+        } catch (error: any) {
+            throw buildError(error);
+        }
+    }
+
+    async createPatient(patient: Patient): Promise<boolean> {
+        const url = `/patients`;
+        console.log('has reached ClinicAPI.createPatient')
+
+        try {
+            const response = await APIClient.post(url, patient);
             return response.data;
         } catch (error: any) {
             throw buildError(error);

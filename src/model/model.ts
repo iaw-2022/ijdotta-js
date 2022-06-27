@@ -1,7 +1,8 @@
 import { Doctor } from "../types/doctors";
 import { Patient } from "../types/patient";
 import { Appointment } from "../types/appointments";
-import ClinicAPI from './services/ClinicAPI'
+import ClinicAPI from "./services/ClinicAPI";
+import dayjs from "dayjs";
 
 interface Model {
     checkPatientExists: (id: number) => Promise<boolean>;
@@ -12,8 +13,11 @@ interface Model {
         from: Date | undefined,
         to: Date | undefined
     ) => Promise<Array<Appointment>>;
-    bookAppointment: (patientId: number, appointmentId: number) => Promise<Boolean>;
-
+    bookAppointment: (
+        patientId: number,
+        appointmentId: number
+    ) => Promise<Boolean>;
+    getPatientAppointments: (patientId: number) => Promise<Array<Appointment>>;
 }
 
 let bool = false;
@@ -37,8 +41,8 @@ class ModelImpl implements Model {
         try {
             return await ClinicAPI.getDoctors();
         } catch (error) {
-            console.error(error)
-            return []
+            console.error(error);
+            return [];
         }
     }
 
@@ -55,7 +59,10 @@ class ModelImpl implements Model {
         }
     }
 
-    async bookAppointment(patientId: number, appointmentId: number): Promise<boolean> {
+    async bookAppointment(
+        patientId: number,
+        appointmentId: number
+    ): Promise<boolean> {
         try {
             await ClinicAPI.bookAppointment(patientId, appointmentId);
             return true;
@@ -63,6 +70,39 @@ class ModelImpl implements Model {
             console.error(error);
             return false;
         }
+    }
+
+    async getPatientAppointments(
+        patientId: number
+    ): Promise<Array<Appointment>> {
+        await delay(2000);
+        return [
+            {
+                id: 1,
+                doctor_id: 123123,
+                date: new Date(),
+                initial_time: new Date(),
+                end_time: new Date(),
+            },
+            {
+                id: 23,
+                doctor_id: 123123,
+                date: dayjs().subtract(7, 'day').toDate(),
+                initial_time: new Date(),
+                end_time: new Date(),
+            },
+            {
+                id: 55,
+                doctor_id: 123123,
+                date: dayjs().add(7, 'day').toDate(),
+                initial_time: new Date(),
+                end_time: new Date(),
+            },
+        ].sort((b1, a1) => a1.date.getMilliseconds() - b1.date.getMilliseconds());
+    }
+
+    canCancel(appointment: Appointment): boolean {
+        return dayjs().isBefore(appointment.date, "day");
     }
 }
 

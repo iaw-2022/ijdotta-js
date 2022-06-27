@@ -36,9 +36,9 @@ function PatientLookUp({patientFound, setPatientFound, ...props}: Props): JSX.El
         setHasClickedSearch(true);
 
         const patientId = Number(idTextField);
+        props.submitPatientId(patientId)
         const findPatientResult = await model.checkPatientExists(patientId);
         setPatientFound(findPatientResult);
-        props.submitPatientId(patientFound ? patientId : NaN);
 
 
         setIsLoading(false);

@@ -5,6 +5,7 @@ import {
     TextField,
     CircularProgress,
     Alert,
+    Box
 } from "@mui/material";
 import { useState } from "react";
 import { Patient } from "../../types/patient";
@@ -48,7 +49,11 @@ const validationSchema = yup.object({
     email: yup.string().email().required(),
 });
 
-function CreatePatientForm({ patientId, setPatientId, handleNextClick }: Props): JSX.Element {
+function CreatePatientForm({
+    patientId,
+    setPatientId,
+    handleNextClick,
+}: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(true);
     const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -63,11 +68,11 @@ function CreatePatientForm({ patientId, setPatientId, handleNextClick }: Props):
     };
 
     const handleSubmit = async (patient: Patient) => {
+        setHasSubmitted(true);
         if (await model.createPatient(patient)) {
-            setPatientId(patient.id)
-            setHasSubmitted(true);
+            setPatientId(patient.id);
             setSuccess(true);
-        
+
             handleNextClick();
         } else {
             setSuccess(false);
@@ -80,10 +85,6 @@ function CreatePatientForm({ patientId, setPatientId, handleNextClick }: Props):
         { setSubmitting }: FormikHelpers<Values>
     ) => {
         setIsLoading(true);
-        // setTimeout(() => {
-        //     alert(JSON.stringify(values, null, 2));
-        //     setIsLoading(false);
-        // }, 500);
         await handleSubmit(values);
         setSubmitting(false);
     };
@@ -96,15 +97,17 @@ function CreatePatientForm({ patientId, setPatientId, handleNextClick }: Props):
 
     return (
         <Card sx={{ padding: "40px" }}>
-            {hasSubmitted && success && (
-                <Alert>Patient successfully created.</Alert>
-            )}
-            {hasSubmitted && !success && (
-                <Alert severity="error">
-                    An error occured while creating the patient. Please try
-                    again later.
-                </Alert>
-            )}
+            <Box mb={"10px"}>
+                {hasSubmitted && success && (
+                    <Alert>Patient successfully created.</Alert>
+                )}
+                {hasSubmitted && !success && (
+                    <Alert severity="error">
+                        An error occured while creating the patient. Please try
+                        again later.
+                    </Alert>
+                )}
+            </Box>
 
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={4}>

@@ -1,8 +1,7 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import CONFIG from "../../config";
 import { Appointment } from "../../types/appointments";
 import { Doctor } from "../../types/doctors";
-import dateTimeFormatter from "../../utils/DateTimeFormatter";
 
 const APIClient = axios.create({
     baseURL: CONFIG.SERVICES.CLINIC_API.BASE_URL,

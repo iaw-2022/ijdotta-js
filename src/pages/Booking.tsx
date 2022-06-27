@@ -16,11 +16,14 @@ const NONE_APPOINTMENT: Appointment = {
 
 function Booking(): JSX.Element {
     const [patientId, setPatientId] = useState<number>(NaN);
-    const [appointment, setAppointment] = useState<Appointment>(NONE_APPOINTMENT);
+    const [appointment, setAppointment] =
+        useState<Appointment>(NONE_APPOINTMENT);
     const [step, setStep] = useState(0);
 
     const handleNextClick = () => {
-        setStep((prevStep) => prevStep + 1);
+        step === 0 && !isNaN(patientId)
+            ? setStep((prevStep) => prevStep + 2)
+            : setStep((prevStep) => prevStep + 1);
     };
 
     const patientLookUpProps = {
@@ -37,14 +40,14 @@ function Booking(): JSX.Element {
 
     const appointmentBookingCalendarProps = {
         handleNextClick,
-        setAppointment
+        setAppointment,
     };
 
     const appointmentBookingCheckoutProps = {
         patientId,
         appointment: appointment,
-        handleNextClick
-    }
+        handleNextClick,
+    };
 
     return (
         <Container sx={{}}>
@@ -55,7 +58,11 @@ function Booking(): JSX.Element {
                     {...appointmentBookingCalendarProps}
                 />
             )}
-            {step === 3 && <AppointmentsBookingCheckout {...appointmentBookingCheckoutProps} />}
+            {step === 3 && (
+                <AppointmentsBookingCheckout
+                    {...appointmentBookingCheckoutProps}
+                />
+            )}
         </Container>
     );
 }

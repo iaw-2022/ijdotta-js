@@ -1,10 +1,11 @@
 import {
     TextField,
     Card,
-    CardContent,
     Typography,
     Button,
     CircularProgress,
+    Alert,
+    Box,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { ChangeEvent, useState } from "react";
@@ -24,8 +25,9 @@ function PatientLookUp(props: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hasClickedSearch, setHasClickedSearch] = useState(false);
 
-    const updateIdTextField = (event: ChangeEvent<HTMLInputElement>) => {
-        setIdTextField(event.target.value);
+    const updateIdTextField = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        if (/^\d+$/.test(target.value) || target.value === "")
+            setIdTextField(target.value);
     };
 
     const onSearchClick = async () => {
@@ -41,42 +43,38 @@ function PatientLookUp(props: Props): JSX.Element {
     };
 
     return (
-        <div>
-            <Card className="auto-width">
-                <CardContent className="main-content">
-                    <Typography>
-                        Enter the {ID_LABEL} to get started:
-                    </Typography>
-                </CardContent>
-                <CardContent className="main-content">
+        <Card sx={{margin: "auto"}}>
+            <Box display={"flex"} flexDirection="column" padding={"40px"} alignItems="stretch" maxWidth="480px" gap={"20px"}>
+                {hasClickedSearch && !isLoading && patientFound && (
+                    <Alert severity="success">Patient found.</Alert>
+                )}
+                {hasClickedSearch && !isLoading && !patientFound && (
+                    <Alert severity="error">
+                        Patient not found. Create one next.
+                    </Alert>
+                )}
+                <Typography>Enter the {ID_LABEL} to get started:</Typography>
+                <Box display={"flex"}>
                     <TextField
                         required
                         label={ID_LABEL}
                         onChange={updateIdTextField}
                         value={idTextField}
+                        fullWidth
                     />
                     <Button onClick={onSearchClick}>
                         {!isLoading ? <SearchIcon /> : <CircularProgress />}
                     </Button>
-                </CardContent>
-                <CardContent className="main-content">
-                    <Typography>
-                        {patientFound
-                            ? "Patient found! Continue to book an appointment."
-                            : "Patient was not found. Continue to load personal information."}
-                    </Typography>
-                </CardContent>
-                <CardContent className="flex-end">
-                    <Button
-                        variant="contained"
-                        disabled={isLoading || !hasClickedSearch}
-                        onClick={props.handleNextClick}
-                    >
-                        Continue
-                    </Button>
-                </CardContent>
-            </Card>
-        </div>
+                </Box>
+                <Button
+                    variant="contained"
+                    disabled={isLoading || !hasClickedSearch}
+                    onClick={props.handleNextClick}
+                >
+                    Continue
+                </Button>
+            </Box>
+        </Card>
     );
 }
 

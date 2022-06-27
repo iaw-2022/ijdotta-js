@@ -10,6 +10,7 @@ import Appointments from './pages/Appointments'
 import Treatments from "./pages/Treatments";
 import { useState } from "react";
 import { Patient } from "./types/patient";
+import Profile from "./pages/Profile";
 
 const DUMMY_PATIENT: Patient = {
     id: 12345,
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/booking" element={<Booking />} />
                     <Route path="/appointments" element={<Appointments patient={patient}/>} />
                     <Route path="/treatments" element={<Treatments patient={patient}/>} />
+                    <Route path="/profile" element={<Profile patient={patient}/>} />
                 </Routes>
             </BrowserRouter>
         </>

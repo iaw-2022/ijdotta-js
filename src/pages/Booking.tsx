@@ -54,7 +54,7 @@ function Booking(): JSX.Element {
     };
 
     return (
-        <Container sx={{}}>
+        <Container sx={{py: "20px"}}>
             {step === 0 && <PatientLookUp {...patientLookUpProps} />}
             {step === 1 && <CreatePatientForm {...createPatientFormProps} />}
             {step === 2 && (

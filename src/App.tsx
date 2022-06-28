@@ -6,7 +6,7 @@ import ResponsiveAppBar from "./components/AppBar/AppBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Booking from "./pages/Booking";
-import Appointments from './pages/Appointments'
+import Appointments from "./pages/Appointments";
 import Treatments from "./pages/Treatments";
 import { useState } from "react";
 import { Patient } from "./types/patient";
@@ -17,22 +17,37 @@ const DUMMY_PATIENT: Patient = {
     name: "Pedro",
     lastname: "Picapidras",
     email: "dummy@dummy.com",
-}
+};
 
 function App() {
-
     const [patient, setPatient] = useState<Patient>(DUMMY_PATIENT);
+
+    const links = [
+        {label: "Book appointment", link: '/booking'},
+        {label: "Profile", link: '/profile'},
+        {label: "Booked appointments", link: '/appointments'},
+        {label: "Treatments", link: '/treatments'},
+    ]
 
     return (
         <>
-            <ResponsiveAppBar />
             <BrowserRouter>
+                <ResponsiveAppBar links={links} />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/booking" element={<Booking />} />
-                    <Route path="/appointments" element={<Appointments patient={patient}/>} />
-                    <Route path="/treatments" element={<Treatments patient={patient}/>} />
-                    <Route path="/profile" element={<Profile patient={patient}/>} />
+                    <Route
+                        path="/appointments"
+                        element={<Appointments patient={patient} />}
+                    />
+                    <Route
+                        path="/treatments"
+                        element={<Treatments patient={patient} />}
+                    />
+                    <Route
+                        path="/profile"
+                        element={<Profile patient={patient} />}
+                    />
                 </Routes>
             </BrowserRouter>
         </>

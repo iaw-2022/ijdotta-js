@@ -6,6 +6,8 @@ import AppointmentsBookingCheckout from "../components/AppointmentBookingCheckou
 import { useState } from "react";
 import { Appointment } from "../types/appointments";
 
+import Route from 'react-router-dom'
+
 const NONE_APPOINTMENT: Appointment = {
     id: 0,
     doctor_id: 0,

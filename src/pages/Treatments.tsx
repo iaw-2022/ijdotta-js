@@ -10,6 +10,7 @@ import model from "../model/model";
 import { Patient } from "../types/patient";
 import { TreatmentsPerDate } from "../types/treatments";
 import TreatmentsGroup from "../components/TreatmentsGroup/TreatmentsGroup";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
     patient: Patient;
@@ -19,17 +20,19 @@ function Treatments({ patient }: Props): JSX.Element {
     const [treatmentsPerDate, setTreatmentsPerDate] =
         useState<Array<TreatmentsPerDate>>();
     const [isLoading, setIsLoading] = useState(true);
+    const {getAccessTokenSilently} = useAuth0();
 
     useEffect(() => {
         setIsLoading(true);
-        model
-            .getPatientTreatments(patient.id)
-            .then((treatmentsPerDate) => {
-                setTreatmentsPerDate(treatmentsPerDate);
-                setIsLoading(false);
-            })
-            .catch();
+        getTreatments();
     }, []);
+
+    const getTreatments = async () => {
+        const accessToken = await getAccessTokenSilently();
+        const treatments = await model.getPatientTreatments(patient.id, accessToken);
+        setTreatmentsPerDate(treatments);
+        setIsLoading(false);
+    }
 
     return (
         <Container sx={{ mt: "20px" }}>
@@ -47,7 +50,7 @@ function Treatments({ patient }: Props): JSX.Element {
                     ) : (
                         treatmentsPerDate?.map((treatmentsGroup) => (
                             <Box maxWidth={"100%"} minWidth={"70%"}>
-                                <TreatmentsGroup
+                                <TreatmentsGroup key={(new Date(treatmentsGroup.date).toISOString())}
                                     treatmentsPerDate={treatmentsGroup}
                                 />
                             </Box>

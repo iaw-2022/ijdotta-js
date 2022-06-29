@@ -1,10 +1,17 @@
 import { Appointment } from "../../types/appointments";
-import { Box, Paper, Typography, Button } from "@mui/material";
+import {
+    Box,
+    Paper,
+    Typography,
+    Button,
+    CircularProgress,
+} from "@mui/material";
 import dateTimeFormatter from "../../utils/DateTimeFormatter";
 import model from "../../model/model";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useState } from "react";
-import ConfirmCancelDialog from './ConfirmCancelDialog'
+import ConfirmCancelDialog from "./ConfirmCancelDialog";
+import { useAuth0 } from "@auth0/auth0-react";
 interface Props {
     appointment: Appointment;
 }
@@ -12,7 +19,10 @@ interface Props {
 function BookedAppointment({ appointment }: Props): JSX.Element {
     const { id, date, initial_time, doctor_id } = appointment;
 
+    const { getAccessTokenSilently } = useAuth0();
+
     const [open, setOpen] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,11 +32,21 @@ function BookedAppointment({ appointment }: Props): JSX.Element {
         setOpen(false);
     };
 
-    const handleCancel = () => {};
+    const handleCancel = async () => {
+        setIsCancelling(true);
+        const accessToken = await getAccessTokenSilently();
+        await model.cancelAppointment(id, accessToken);
+        setIsCancelling(false);
+    };
 
     return (
         <Paper elevation={5}>
-            <ConfirmCancelDialog open={open} handleClose={handleClose} handleCancel={handleCancel} />
+            <ConfirmCancelDialog
+                open={open}
+                handleClose={handleClose}
+                handleCancel={handleCancel}
+                isCancelling={isCancelling}
+            />
             <Box display="flex" flexDirection="row" borderColor={"green"}>
                 <Box
                     display={"flex"}
@@ -55,7 +75,7 @@ function BookedAppointment({ appointment }: Props): JSX.Element {
                         disabled={!model.canCancel(appointment)}
                         onClick={handleClickOpen}
                     >
-                        <CancelIcon />
+                        {isCancelling ? <CircularProgress /> : <CancelIcon />}
                     </Button>
                 </Box>
             </Box>

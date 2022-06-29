@@ -11,6 +11,7 @@ import model from "../model/model";
 import { Appointment } from "../types/appointments";
 import { Patient } from "../types/patient";
 import BookedAppointment from "../components/BookedAppointment/BookedAppointment";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
     patient: Patient;
@@ -19,17 +20,22 @@ interface Props {
 function Appointments({ patient }: Props): JSX.Element {
     const [appointments, setAppointments] = useState<Array<Appointment>>();
     const [isLoading, setIsLoading] = useState(true);
+    const { getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
         setIsLoading(true);
-        model
-            .getPatientAppointments(patient.id)
-            .then((appointments) => {
-                setAppointments(appointments);
-                setIsLoading(false);
-            })
-            .catch();
+        getAppointments();
     }, [patient.id]);
+
+    const getAppointments = async () => {
+        const accessToken = await getAccessTokenSilently();
+        const appointments = await model.getPatientAppointments(
+            42631354, // patient.id,
+            accessToken
+        );
+        setAppointments(appointments);
+        setIsLoading(false);
+    };
 
     return (
         <Container sx={{ mt: "20px" }}>

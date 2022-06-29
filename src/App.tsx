@@ -12,8 +12,11 @@ import { useState } from "react";
 import { Patient } from "./types/patient";
 import Profile from "./pages/Profile";
 
+import { Auth0Provider } from "@auth0/auth0-react";
+import CONFIG from "./config";
+
 const DUMMY_PATIENT: Patient = {
-    id: 12345,
+    id: 42631354,
     name: "Pedro",
     lastname: "Picapidras",
     email: "dummy@dummy.com",
@@ -23,18 +26,27 @@ function App() {
     const [patient, setPatient] = useState<Patient>(DUMMY_PATIENT);
 
     const links = [
-        {label: "Book appointment", link: '/booking'},
-        {label: "Profile", link: '/profile'},
-        {label: "Booked appointments", link: '/appointments'},
-        {label: "Treatments", link: '/treatments'},
+        { label: "Book appointment", link: "/booking" },
+    ];
+    
+    const protectedLinks = [
+        { label: "Profile", link: "/profile" },
+        { label: "Booked appointments", link: "/appointments" },
+        { label: "Treatments", link: "/treatments" },
     ]
 
     return (
-        <>
+        <Auth0Provider
+            domain={CONFIG.AUTH0.DOMAIN}
+            clientId={CONFIG.AUTH0.CLIENT_ID}
+            redirectUri={window.location.origin}
+            audience={CONFIG.AUTH0.AUDIENCE}
+            scope={""}
+        >
             <BrowserRouter>
                 <ResponsiveAppBar links={links} />
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home links={links} protectedLinks={protectedLinks} />} />
                     <Route path="/booking" element={<Booking />} />
                     <Route
                         path="/appointments"
@@ -50,7 +62,7 @@ function App() {
                     />
                 </Routes>
             </BrowserRouter>
-        </>
+        </Auth0Provider>
     );
 }
 

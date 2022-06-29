@@ -27,7 +27,7 @@ const StyledLink = styled(Link)`
     text-decoration: None;
 `;
 
-const ResponsiveAppBar = ({links}: Props) => {
+const ResponsiveAppBar = ({ links }: Props) => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -109,13 +109,21 @@ const ResponsiveAppBar = ({links}: Props) => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {links.map(({label, link}) => (
+                            {links.map(({ label, link }) => (
                                 <MenuItem
                                     key={label}
                                     onClick={handleCloseNavMenu}
                                 >
                                     <Typography textAlign="center">
-                                        <Link style={{color: "black", textDecoration: "none"}} to={link}>{label}</Link>
+                                        <Link
+                                            style={{
+                                                color: "black",
+                                                textDecoration: "none",
+                                            }}
+                                            to={link}
+                                        >
+                                            {label}
+                                        </Link>
                                     </Typography>
                                 </MenuItem>
                             ))}
@@ -148,14 +156,19 @@ const ResponsiveAppBar = ({links}: Props) => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        {links.map(({label, link}) => (
-                            <Button
-                                key={label}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: "white", display: "block" }}
-                            >
-                                <StyledLink to={link}>{label}</StyledLink>
-                            </Button>
+                        {links.map(({ label, link }) => (
+                            <StyledLink key={label} to={link}>
+                                <Button
+                                    onClick={handleCloseNavMenu}
+                                    sx={{
+                                        my: 2,
+                                        color: "white",
+                                        display: "block",
+                                    }}
+                                >
+                                    {label}
+                                </Button>
+                            </StyledLink>
                         ))}
                     </Box>
 

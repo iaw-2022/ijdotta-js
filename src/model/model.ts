@@ -18,7 +18,14 @@ interface Model {
         patientId: number,
         appointmentId: number
     ) => Promise<Boolean>;
-    getPatientAppointments: (patientId: number) => Promise<Array<Appointment>>;
+    getPatientAppointments: (
+        patientId: number,
+        accessToken: string
+    ) => Promise<Array<Appointment>>;
+    cancelAppointment: (
+        appointmentId: number,
+        accessToken: string
+    ) => Promise<boolean>;
 }
 
 let bool = false;
@@ -28,8 +35,7 @@ const delay = (ms: number) => {
 };
 
 class ModelImpl implements Model {
-
-    private doctors : Array<Doctor> | undefined
+    private doctors: Array<Doctor> | undefined;
 
     async checkPatientExists(id: number): Promise<boolean> {
         bool = !bool;
@@ -39,7 +45,7 @@ class ModelImpl implements Model {
 
     async createPatient(patient: Patient): Promise<boolean> {
         try {
-            return await ClinicAPI.createPatient(patient)
+            return await ClinicAPI.createPatient(patient);
         } catch (error) {
             return false;
         }
@@ -49,7 +55,7 @@ class ModelImpl implements Model {
         try {
             if (this.doctors === undefined)
                 this.doctors = await ClinicAPI.getDoctors();
-            return this.doctors
+            return this.doctors;
         } catch (error) {
             console.error(error);
             return [];
@@ -83,67 +89,59 @@ class ModelImpl implements Model {
     }
 
     async getPatientAppointments(
-        patientId: number
+        patientId: number,
+        accessToken: string
     ): Promise<Array<Appointment>> {
-        await delay(2000);
-        return [
-            {
-                id: 1,
-                doctor_id: 123123,
-                date: new Date(),
-                initial_time: new Date(),
-                end_time: new Date(),
-            },
-            {
-                id: 23,
-                doctor_id: 123123,
-                date: dayjs().subtract(7, 'day').toDate(),
-                initial_time: new Date(),
-                end_time: new Date(),
-            },
-            {
-                id: 55,
-                doctor_id: 123123,
-                date: dayjs().add(7, 'day').toDate(),
-                initial_time: new Date(),
-                end_time: new Date(),
-            },
-        ].sort((b1, a1) => a1.date.getMilliseconds() - b1.date.getMilliseconds());
+        try {
+            return ClinicAPI.getPatientAppointments(patientId, accessToken);
+        } catch (error) {
+            return [];
+        }
     }
 
     canCancel(appointment: Appointment): boolean {
         return dayjs().isBefore(appointment.date, "day");
     }
 
-    async getPatientTreatments(patientId: number): Promise<Array<TreatmentsPerDate>> {
-        return [
-            {
-                date: new Date(),
-                treatments: [
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                ]
-            },
-            {
-                date: dayjs().subtract(25, 'days').toDate(),
-                treatments: [
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                ]
-            },
-            {
-                date: dayjs().subtract(3, 'months').toDate(),
-                treatments: [
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                    {title: "This is a treatment", description: "You should sleep"},
-                ]
-            },
-        ];
+    async getPatientTreatments(
+        patientId: number,
+        accessToken: string
+    ): Promise<Array<TreatmentsPerDate>> {
+        try {
+            return ClinicAPI.getPatientTreatments(patientId, accessToken);
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async cancelAppointment(
+        appointmentId: number,
+        accessToken: string
+    ): Promise<boolean> {
+        try {
+            return await ClinicAPI.cancelAppointment(
+                appointmentId,
+                accessToken
+            );
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async getPatientProfile(
+        patientId: number,
+        accessToken: string
+    ): Promise<Patient> {
+        try {
+            return await ClinicAPI.getPatientProfile(patientId, accessToken);
+        } catch (error) {
+            return {
+                id: 0,
+                name: "Unknown",
+                lastname: "Unknown",
+                email: "Unknown",
+            };
+        }
     }
 }
 

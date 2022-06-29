@@ -1,4 +1,5 @@
 import { Container, Card, Typography, Grid } from "@mui/material";
+import HomeButton from "../components/HomeButton/HomeButton";
 import { Patient } from "../types/patient";
 
 interface Props {
@@ -21,9 +22,10 @@ const getGridItems = (label: string, value: string | number) => {
 function Profile({ patient }: Props): JSX.Element {
     const { id, name, lastname, email, healthInsuranceCompany, healthInsuranceId } : Patient =
         patient;
+
     return (
         <Container sx={{}}>
-            <Card sx={{margin: "20px"}}>
+            <Card sx={{padding: "20px", margin: "20px"}}>
                 <Grid container spacing={1} padding={"20px"}>
                     {getGridItems("ID", id)}
                     {getGridItems("Name", name)}
@@ -38,6 +40,7 @@ function Profile({ patient }: Props): JSX.Element {
                     )}
                     {getGridItems("Email", email)}
                 </Grid>
+                <HomeButton />
             </Card>
         </Container>
     );

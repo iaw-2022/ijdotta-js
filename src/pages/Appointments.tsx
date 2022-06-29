@@ -12,6 +12,7 @@ import { Appointment } from "../types/appointments";
 import { Patient } from "../types/patient";
 import BookedAppointment from "../components/BookedAppointment/BookedAppointment";
 import { useAuth0 } from "@auth0/auth0-react";
+import HomeButton from "../components/HomeButton/HomeButton";
 
 interface Props {
     patient: Patient;
@@ -32,15 +33,14 @@ function Appointments({ patient }: Props): JSX.Element {
             setAppointments(appointments);
             setIsLoading(false);
         };
-        
+
         setIsLoading(true);
         getAppointments();
     }, [getAccessTokenSilently, patient.id]);
 
-
     return (
         <Container sx={{ mt: "20px" }}>
-            <Card sx={{padding: "20px"}}>
+            <Card sx={{ padding: "20px" }}>
                 <Typography variant="h4">Booked appointments</Typography>
                 <Box
                     display="flex"
@@ -53,12 +53,17 @@ function Appointments({ patient }: Props): JSX.Element {
                         <CircularProgress />
                     ) : (
                         appointments?.map((appointment) => (
-                            <Box key={appointment.id} maxWidth={"90%"} minWidth={"50%"}>
+                            <Box
+                                key={appointment.id}
+                                maxWidth={"90%"}
+                                minWidth={"50%"}
+                            >
                                 <BookedAppointment appointment={appointment} />
                             </Box>
                         ))
                     )}
                 </Box>
+                <HomeButton />
             </Card>
         </Container>
     );

@@ -11,6 +11,7 @@ import { Patient } from "../types/patient";
 import { TreatmentsPerDate } from "../types/treatments";
 import TreatmentsGroup from "../components/TreatmentsGroup/TreatmentsGroup";
 import { useAuth0 } from "@auth0/auth0-react";
+import HomeButton from "../components/HomeButton/HomeButton";
 
 interface Props {
     patient: Patient;
@@ -36,8 +37,8 @@ function Treatments({ patient }: Props): JSX.Element {
 
     return (
         <Container sx={{ mt: "20px" }}>
-            <Card sx={{}}>
-                <Typography>Historial of assigned treatments</Typography>
+            <Card sx={{padding: "20px"}}>
+                <Typography variant="h4">Historial of assigned treatments</Typography>
                 <Box
                     display="flex"
                     flexDirection="column"
@@ -57,6 +58,7 @@ function Treatments({ patient }: Props): JSX.Element {
                         ))
                     )}
                 </Box>
+            <HomeButton />
             </Card>
         </Container>
     );

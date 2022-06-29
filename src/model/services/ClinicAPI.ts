@@ -23,14 +23,6 @@ const buildError = (error: AxiosError) => {
     return new Error(data.error);
 };
 
-const getAuthHeaders = (accessToken: string) => {
-    return {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    };
-};
-
 class ClinicService {
     async checkPatientExists(id: number): Promise<boolean> {
         try {

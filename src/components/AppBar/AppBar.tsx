@@ -11,12 +11,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import CreateIcon from '@mui/icons-material/Create';
 
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import CONST from "../../const";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
     links: Record<string, string>[];
@@ -50,20 +51,26 @@ const ResponsiveAppBar = ({ links }: Props) => {
         setAnchorElUser(null);
     };
 
+    const {logout, user} = useAuth0();
+
+    const onClickLogout = () => {
+        logout()
+    }
+
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon
+                    <LocalHospitalIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
                     />
                     <Typography
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
+                        href={CONST.ROUTES.HOME}
                         sx={{
-                            mr: 2,
+                            mx: 2,
                             display: { xs: "none", md: "flex" },
                             fontFamily: "monospace",
                             fontWeight: 700,
@@ -72,7 +79,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        {CONST.APP_NAME}
                     </Typography>
 
                     <Box
@@ -129,7 +136,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon
+                    <LocalHospitalIcon
                         sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
                     />
                     <Typography
@@ -148,7 +155,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        {CONST.APP_NAME}
                     </Typography>
                     <Box
                         sx={{
@@ -166,6 +173,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                                         display: "block",
                                     }}
                                 >
+                                    <CreateIcon sx={{mr: "4px", mb: "5px"}} />
                                     {label}
                                 </Button>
                             </StyledLink>
@@ -180,7 +188,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                             >
                                 <Avatar
                                     alt="Remy Sharp"
-                                    src="/static/images/avatar/2.jpg"
+                                    src={user?.picture}
                                 />
                             </IconButton>
                         </Tooltip>
@@ -200,16 +208,14 @@ const ResponsiveAppBar = ({ links }: Props) => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
+                            
                                 <MenuItem
-                                    key={setting}
                                     onClick={handleCloseUserMenu}
                                 >
                                     <Typography textAlign="center">
-                                        {setting}
+                                        <Button onClick={onClickLogout}>Logout</Button>
                                     </Typography>
                                 </MenuItem>
-                            ))}
                         </Menu>
                     </Box>
                 </Toolbar>

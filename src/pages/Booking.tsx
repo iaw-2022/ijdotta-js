@@ -69,7 +69,7 @@ function Booking({patient} : Props): JSX.Element {
     };
 
     return (
-        <Container sx={{ py: "20px" }}>
+        <Container sx={{ py: "20px", display:"flex", flexDirection:"row", justifyContent: "center"}}>
             {step === 0 && <PatientLookUp {...patientLookUpProps} />}
             {step === 1 && <CreatePatientForm {...createPatientFormProps} />}
             {step === 2 && (

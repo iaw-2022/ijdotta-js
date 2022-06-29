@@ -83,13 +83,17 @@ class ClinicService {
         const url = `/appointments/${id}`;
 
         const data = {
-            patient_id: patient_id,
+            "patient_id": Number(patient_id),
         };
+
+        console.log('Booking: ' + url + "  " + patient_id)
 
         try {
             const response = await APIClient.put(url, data);
+            console.log(response);
             return response.data;
         } catch (error: any) {
+            console.log(error);
             throw buildError(error);
         }
     }

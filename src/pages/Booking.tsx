@@ -8,6 +8,7 @@ import { Appointment } from "../types/appointments";
 
 import Route from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Patient } from "../types/patient";
 
 const NONE_APPOINTMENT: Appointment = {
     id: 0,
@@ -18,11 +19,11 @@ const NONE_APPOINTMENT: Appointment = {
 };
 
 interface Props {
-    tryToGetPatient: () => void;
+    patient: Patient
 }
 
-function Booking(): JSX.Element {
-    const [patientId, setPatientId] = useState<number>(NaN);
+function Booking({patient} : Props): JSX.Element {
+    const [patientId, setPatientId] = useState<number>(patient.id);
     const [appointment, setAppointment] =
         useState<Appointment>(NONE_APPOINTMENT);
     const [patientFound, setPatientFound] = useState<boolean>(false);
@@ -30,12 +31,9 @@ function Booking(): JSX.Element {
     const { isAuthenticated } = useAuth0();
 
     useEffect(() => {
-        console.log("is auth: " + isAuthenticated)
         if (step === 0 && isAuthenticated && patientId !== 0) {
             setStep(2);
         }
-
-        // tryToGetPatient()
     }, [step, isAuthenticated, patientId]);
 
     const handleNextClick = () => {

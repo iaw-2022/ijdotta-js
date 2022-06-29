@@ -71,7 +71,10 @@ function App() {
                         />
                     }
                 />
-                <Route path="/booking" element={<Booking />} />
+                <Route
+                    path="/booking"
+                    element={<Booking patient={patient} />}
+                />
                 <Route
                     path="/appointments"
                     element={<Appointments patient={patient} />}

@@ -1,6 +1,7 @@
 import { Appointment } from "../../types/appointments";
 import model from "../../model/model";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Button,
     CircularProgress,
@@ -49,7 +50,6 @@ const renderAppointmentInfo = (
 function AppointmentsBookingCheckout({
     patientId,
     appointment,
-    handleNextClick,
 }: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [hasConfirmed, setHasConfirmed] = useState(false);
@@ -67,6 +67,11 @@ function AppointmentsBookingCheckout({
     const onCancelClick = () => {
         setHasCancelled(true);
     };
+
+    const navigate = useNavigate();
+    const onFinishClick = () => {
+        navigate('/', {replace: true})
+    }
 
     return (
         <Card>
@@ -134,7 +139,7 @@ function AppointmentsBookingCheckout({
                 <Button
                     variant="contained"
                     disabled={isLoading || !(hasConfirmed || hasCancelled)}
-                    onClick={handleNextClick}
+                    onClick={onFinishClick}
                 >
                     Finish
                 </Button>

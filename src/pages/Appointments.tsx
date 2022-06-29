@@ -23,24 +23,25 @@ function Appointments({ patient }: Props): JSX.Element {
     const { getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
+        const getAppointments = async () => {
+            const accessToken = await getAccessTokenSilently();
+            const appointments = await model.getPatientAppointments(
+                42631354, // patient.id,
+                accessToken
+            );
+            setAppointments(appointments);
+            setIsLoading(false);
+        };
+        
         setIsLoading(true);
         getAppointments();
-    }, [patient.id]);
+    }, [getAccessTokenSilently, patient.id]);
 
-    const getAppointments = async () => {
-        const accessToken = await getAccessTokenSilently();
-        const appointments = await model.getPatientAppointments(
-            42631354, // patient.id,
-            accessToken
-        );
-        setAppointments(appointments);
-        setIsLoading(false);
-    };
 
     return (
         <Container sx={{ mt: "20px" }}>
-            <Card sx={{}}>
-                <Typography>Booked appointments</Typography>
+            <Card sx={{padding: "20px"}}>
+                <Typography variant="h4">Booked appointments</Typography>
                 <Box
                     display="flex"
                     flexDirection="column"
@@ -52,7 +53,7 @@ function Appointments({ patient }: Props): JSX.Element {
                         <CircularProgress />
                     ) : (
                         appointments?.map((appointment) => (
-                            <Box maxWidth={"90%"} minWidth={"50%"}>
+                            <Box key={appointment.id} maxWidth={"90%"} minWidth={"50%"}>
                                 <BookedAppointment appointment={appointment} />
                             </Box>
                         ))

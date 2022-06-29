@@ -177,7 +177,13 @@ class ClinicService {
 
         try {
             const response = await APIClient.get(url, config);
-            return response.data;
+            const data = response.data;
+            const patient: Patient = {
+                healthInsuranceCompany: data.health_insurance_company,
+                healthInsuranceId: data.health_insurance_id,
+                ...data,
+            };
+            return patient;
         } catch (error: any) {
             throw buildError(error);
         }

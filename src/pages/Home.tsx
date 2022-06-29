@@ -1,10 +1,19 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Container, Card, Button, Typography, Grid, Alert } from "@mui/material";
+import {
+    Container,
+    Card,
+    Button,
+    Typography,
+    Grid,
+    Alert,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import LoginButton from "../components/LoginButton/LoginButton";
 import styled from "@emotion/styled";
 import LogoutButton from "../components/LogoutButton/LogoutButton";
-import { useState } from "react";
+import { useEffect } from "react";
+import model from "../model/model";
+import { Patient } from "../types/patient";
 
 const StyledLink = styled(Link)`
     color: White;
@@ -16,16 +25,11 @@ const StyledLink = styled(Link)`
 interface Props {
     links: Record<string, string>[];
     protectedLinks: Record<string, string>[];
+    setPatient: (patient: Patient) => void;
 }
 
-function Home({ links, protectedLinks }: Props): JSX.Element {
-    const { isAuthenticated, user } = useAuth0();
-
-    const [hasClickedLogin, setHasClickedLogin] = useState(false);
-
-    const handleLogin = () => {
-        setHasClickedLogin(true)
-    }
+function Home({ links, protectedLinks, setPatient }: Props): JSX.Element {
+    const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
     return (
         <Container sx={{ padding: "20px" }}>
@@ -51,10 +55,7 @@ function Home({ links, protectedLinks }: Props): JSX.Element {
                         {links.map(({ label, link }) => {
                             return (
                                 <StyledLink key={link} to={link}>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                    >
+                                    <Button variant="contained" fullWidth>
                                         {label}
                                     </Button>
                                 </StyledLink>
@@ -80,20 +81,21 @@ function Home({ links, protectedLinks }: Props): JSX.Element {
                             protectedLinks.map(({ label, link }) => {
                                 return (
                                     <StyledLink key={link} to={link}>
-                                        <Button
-                                            variant="contained"
-                                            fullWidth
-                                        >
+                                        <Button variant="contained" fullWidth>
                                             {label}
                                         </Button>
                                     </StyledLink>
                                 );
                             })
                         ) : isAuthenticated ? (
-                            <Alert severity="warning"><Typography>Remember to verify your email.</Typography></Alert>
-                            ) : 
+                            <Alert severity="warning">
+                                <Typography>
+                                    Remember to verify your email.
+                                </Typography>
+                            </Alert>
+                        ) : (
                             <LoginButton />
-                        }
+                        )}
                         <LogoutButton />
                     </Grid>
                 </Grid>

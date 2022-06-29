@@ -3,10 +3,11 @@ import PatientLookUp from "../components/PatientLookUp/PatientLookUp";
 import CreatePatientForm from "../components/CreatePatientForm/CreatePatientForm";
 import AppointmentsBookingCalendar from "../components/AppointmentsBookingCalendar/AppointmentsBookingCalendar";
 import AppointmentsBookingCheckout from "../components/AppointmentBookingCheckout/AppointmentBookingCheckout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Appointment } from "../types/appointments";
 
-import Route from 'react-router-dom'
+import Route from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const NONE_APPOINTMENT: Appointment = {
     id: 0,
@@ -16,12 +17,26 @@ const NONE_APPOINTMENT: Appointment = {
     end_time: new Date(),
 };
 
+interface Props {
+    tryToGetPatient: () => void;
+}
+
 function Booking(): JSX.Element {
     const [patientId, setPatientId] = useState<number>(NaN);
     const [appointment, setAppointment] =
         useState<Appointment>(NONE_APPOINTMENT);
     const [patientFound, setPatientFound] = useState<boolean>(false);
     const [step, setStep] = useState(0);
+    const { isAuthenticated } = useAuth0();
+
+    useEffect(() => {
+        console.log("is auth: " + isAuthenticated)
+        if (step === 0 && isAuthenticated && patientId !== 0) {
+            setStep(2);
+        }
+
+        // tryToGetPatient()
+    }, [step, isAuthenticated, patientId]);
 
     const handleNextClick = () => {
         step === 0 && patientFound

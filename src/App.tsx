@@ -8,15 +8,16 @@ import Home from "./pages/Home";
 import Booking from "./pages/Booking";
 import Appointments from "./pages/Appointments";
 import Treatments from "./pages/Treatments";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Patient } from "./types/patient";
 import Profile from "./pages/Profile";
 
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import CONFIG from "./config";
+import model from "./model/model";
 
 const DUMMY_PATIENT: Patient = {
-    id: 42631354,
+    id: 0,
     name: "Pedro",
     lastname: "Picapidras",
     email: "dummy@dummy.com",
@@ -25,44 +26,66 @@ const DUMMY_PATIENT: Patient = {
 function App() {
     const [patient, setPatient] = useState<Patient>(DUMMY_PATIENT);
 
-    const links = [
-        { label: "Book appointment", link: "/booking" },
-    ];
-    
+    const links = [{ label: "Book appointment", link: "/booking" }];
+
     const protectedLinks = [
         { label: "Profile", link: "/profile" },
         { label: "Booked appointments", link: "/appointments" },
         { label: "Treatments", link: "/treatments" },
-    ]
+    ];
+
+    const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+
+    useEffect(() => {
+        console.log("Applying effect: is auth: " + isAuthenticated);
+
+        const tryToGetPatient = async () => {
+            const email = user?.email;
+            if (email !== undefined) {
+                const patientId = await model.getPatientIdGivenEmail(email);
+                const accessToken = await getAccessTokenSilently();
+                const patient = await model.getPatientProfile(
+                    patientId,
+                    accessToken
+                );
+                setPatient(patient);
+                console.log("set pattient: ");
+                console.log(patient);
+            }
+        };
+
+        tryToGetPatient();
+    }, [getAccessTokenSilently, isAuthenticated, user?.email, user]);
 
     return (
-        <Auth0Provider
-            domain={CONFIG.AUTH0.DOMAIN}
-            clientId={CONFIG.AUTH0.CLIENT_ID}
-            redirectUri={window.location.origin}
-            audience={CONFIG.AUTH0.AUDIENCE}
-            scope={""}
-        >
-            <BrowserRouter>
-                <ResponsiveAppBar links={links} />
-                <Routes>
-                    <Route path="/" element={<Home links={links} protectedLinks={protectedLinks} />} />
-                    <Route path="/booking" element={<Booking />} />
-                    <Route
-                        path="/appointments"
-                        element={<Appointments patient={patient} />}
-                    />
-                    <Route
-                        path="/treatments"
-                        element={<Treatments patient={patient} />}
-                    />
-                    <Route
-                        path="/profile"
-                        element={<Profile patient={patient} />}
-                    />
-                </Routes>
-            </BrowserRouter>
-        </Auth0Provider>
+        <BrowserRouter>
+            <ResponsiveAppBar links={links} />
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Home
+                            links={links}
+                            protectedLinks={protectedLinks}
+                            setPatient={setPatient}
+                        />
+                    }
+                />
+                <Route path="/booking" element={<Booking />} />
+                <Route
+                    path="/appointments"
+                    element={<Appointments patient={patient} />}
+                />
+                <Route
+                    path="/treatments"
+                    element={<Treatments patient={patient} />}
+                />
+                <Route
+                    path="/profile"
+                    element={<Profile patient={patient} />}
+                />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

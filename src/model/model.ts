@@ -28,19 +28,15 @@ interface Model {
     ) => Promise<boolean>;
 }
 
-let bool = false;
-
-const delay = (ms: number) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 class ModelImpl implements Model {
     private doctors: Array<Doctor> | undefined;
 
     async checkPatientExists(id: number): Promise<boolean> {
-        bool = !bool;
-        await delay(500);
-        return bool;
+        try {
+            return await ClinicAPI.checkPatientExists(id);
+        } catch (error) {
+            return false;
+        }
     }
 
     async createPatient(patient: Patient): Promise<boolean> {
@@ -141,6 +137,14 @@ class ModelImpl implements Model {
                 lastname: "Unknown",
                 email: "Unknown",
             };
+        }
+    }
+
+    async getPatientIdGivenEmail(email: string): Promise<number> {
+        try {
+            return ClinicAPI.getPatientIdGivenEmail(email);
+        } catch (error) {
+            return 0;
         }
     }
 }

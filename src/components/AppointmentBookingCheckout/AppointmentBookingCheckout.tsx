@@ -53,6 +53,7 @@ function AppointmentsBookingCheckout({
 }: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [hasConfirmed, setHasConfirmed] = useState(false);
+    const [hasCancelled, setHasCancelled] = useState(false);
     const [success, setSuccess] = useState(false);
 
     const onConfirmClick = async () => {
@@ -64,7 +65,7 @@ function AppointmentsBookingCheckout({
     };
 
     const onCancelClick = () => {
-        setHasConfirmed(true);
+        setHasCancelled(true);
     };
 
     return (
@@ -88,6 +89,12 @@ function AppointmentsBookingCheckout({
                                 An error has occured. Try again later.
                             </Alert>
                         )}
+                        {hasCancelled && (
+                            <Alert severity="warning">
+                                Appointment was not booked.
+                            </Alert>
+                        )}
+
                         <Box padding={"20px"} display="flex" flexDirection={"column"} rowGap={"20px"}>
                             <Typography variant="h6">
                                 This is the reservation information:
@@ -100,7 +107,7 @@ function AppointmentsBookingCheckout({
                                         color="success"
                                         fullWidth
                                         onClick={onConfirmClick}
-                                        disabled={isLoading || hasConfirmed}
+                                        disabled={isLoading || hasConfirmed || hasCancelled}
                                     >
                                         {isLoading ? (
                                             <CircularProgress />
@@ -115,7 +122,7 @@ function AppointmentsBookingCheckout({
                                         color="error"
                                         fullWidth
                                         onClick={onCancelClick}
-                                        disabled={hasConfirmed}
+                                        disabled={hasConfirmed || hasCancelled}
                                     >
                                         Cancel
                                     </Button>
@@ -126,7 +133,7 @@ function AppointmentsBookingCheckout({
                 </Box>
                 <Button
                     variant="contained"
-                    disabled={isLoading || !hasConfirmed}
+                    disabled={isLoading || !(hasConfirmed || hasCancelled)}
                     onClick={handleNextClick}
                 >
                     Finish

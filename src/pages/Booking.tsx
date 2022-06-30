@@ -6,7 +6,6 @@ import AppointmentsBookingCheckout from "../components/AppointmentBookingCheckou
 import { useEffect, useState } from "react";
 import { Appointment } from "../types/appointments";
 
-import Route from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Patient } from "../types/patient";
 import model from "../model/model";

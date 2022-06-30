@@ -12,8 +12,7 @@ import { useEffect, useState } from "react";
 import { Patient } from "./types/patient";
 import Profile from "./pages/Profile";
 
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import CONFIG from "./config";
+import { useAuth0 } from "@auth0/auth0-react";
 import model from "./model/model";
 
 const DUMMY_PATIENT: Patient = {

@@ -11,9 +11,6 @@ import { Link } from "react-router-dom";
 import LoginButton from "../components/LoginButton/LoginButton";
 import styled from "@emotion/styled";
 import LogoutButton from "../components/LogoutButton/LogoutButton";
-import { useEffect } from "react";
-import model from "../model/model";
-import { Patient } from "../types/patient";
 
 const StyledLink = styled(Link)`
     color: White;

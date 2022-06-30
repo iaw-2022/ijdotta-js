@@ -30,19 +30,24 @@ const ANY_DOCTOR: Doctor = {
     lastname: "",
 };
 
-function Filters({ setTo, setFrom, setDoctor, isLoading, setIsLoading }: Props): JSX.Element {
+function Filters({
+    setTo,
+    setFrom,
+    setDoctor,
+    isLoading,
+    setIsLoading,
+}: Props): JSX.Element {
     const [doctors, setDoctors] = useState<Array<Doctor>>([ANY_DOCTOR]);
 
     useEffect(() => {
+        const getDoctors = async () => {
+            setIsLoading(true);
+            const doctors = await model.getDoctors();
+            setDoctors([ANY_DOCTOR, ...doctors]);
+            setIsLoading(false);
+        };
         getDoctors();
-    }, []);
-
-    const getDoctors = async () => {
-        setIsLoading(true)
-        const doctors = await model.getDoctors();
-        setDoctors([ANY_DOCTOR, ...doctors]);
-        setIsLoading(false)
-    };
+    }, [setIsLoading]);
 
     const initialValues = {
         doctor: ANY_DOCTOR.id,

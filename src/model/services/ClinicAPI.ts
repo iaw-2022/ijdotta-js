@@ -75,10 +75,10 @@ class ClinicService {
         const url = `/appointments/${id}`;
 
         const data = {
-            "patient_id": Number(patient_id),
+            patient_id: Number(patient_id),
         };
 
-        console.log('Booking: ' + url + "  " + patient_id)
+        console.log("Booking: " + url + "  " + patient_id);
 
         try {
             const response = await APIClient.put(url, data);
@@ -95,7 +95,11 @@ class ClinicService {
         console.log("has reached ClinicAPI.createPatient");
 
         try {
-            const response = await APIClient.post(url, patient);
+            const response = await APIClient.post(url, {
+                health_insurance_id: patient.healthInsuranceId,
+                health_insurance_company: patient.healthInsuranceCompany,
+                ...patient,
+            });
             return response.data;
         } catch (error: any) {
             throw buildError(error);

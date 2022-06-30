@@ -28,9 +28,12 @@ const NONE_APPOINTMENT: Appointment = {
 const getSelectLabel = ({ id, date, initial_time, doctor_id }: Appointment) => {
     const safeDate = new Date(date);
     const safeTime = new Date(initial_time);
+
+    const {name, lastname} = model.getDoctor(doctor_id) || {name: "Unknown", lastname: ""};
+
     return id === 0
         ? `Select an appointment`
-        : `${dateTimeFormatter.formatDate(safeDate)}, ${dateTimeFormatter.formatTime(safeTime)}, ${doctor_id}.`;
+        : `${dateTimeFormatter.formatDate(safeDate)}, ${dateTimeFormatter.formatTime(safeTime)}, ${name} ${lastname}.`;
 }
 
 function AppointmentsBookingCalendar({ handleNextClick, setAppointment }: Props): JSX.Element {

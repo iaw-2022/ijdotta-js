@@ -31,6 +31,23 @@ interface Model {
 
 class ModelImpl implements Model {
     private doctors: Array<Doctor> | undefined;
+    private doctorsMap: Record<number, Doctor>;
+
+    constructor() {
+        const setDoctors = async () => {
+            this.doctors = await ClinicAPI.getDoctors();
+            this.doctors.forEach((doctor) => {
+                this.doctorsMap[doctor.id] = doctor;
+            });
+        };
+
+        this.doctorsMap = {};
+        setDoctors();
+    }
+
+    getDoctor(id: number): Doctor {
+        return this.doctorsMap[id];
+    }
 
     async checkPatientExists(id: number): Promise<boolean> {
         try {

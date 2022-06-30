@@ -37,12 +37,15 @@ const renderAppointmentInfo = (
     patientId: number,
     { date, initial_time, doctor_id }: Appointment,
 ) => {
+
+    const {name, lastname} = model.getDoctor(doctor_id) || {name: "Unknown", lastname: ""};
+
     return (
         <>
             {getInfoRow("Patient ID:", patientId)}
             {getInfoRow("Date: ", dateTimeFormater.formatDate(date))}
             {getInfoRow("Time: ", dateTimeFormater.formatTime(initial_time))}
-            {getInfoRow("Doctor: ", doctor_id)}
+            {getInfoRow("Doctor: ", `${name} ${lastname}`)}
         </>
     );
 };

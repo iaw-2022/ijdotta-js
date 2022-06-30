@@ -42,6 +42,8 @@ function BookedAppointment({ patientId, appointment, notifyDeletedAppointment }:
         setIsCancelling(false);
     };
 
+    const {name, lastname} = model.getDoctor(doctor_id) || {name: "Unknown", lastname: ""};
+
     return (
         <Paper elevation={5}>
             <ConfirmCancelDialog
@@ -65,7 +67,7 @@ function BookedAppointment({ patientId, appointment, notifyDeletedAppointment }:
                     <Typography>
                         {dateTimeFormatter.formatTime(initial_time)}
                     </Typography>
-                    <Typography>{doctor_id}</Typography>
+                    <Typography>{`${name} ${lastname}`}</Typography>
                 </Box>
                 <Box
                     display={"flex"}

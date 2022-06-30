@@ -56,7 +56,7 @@ function Appointments({ patient }: Props): JSX.Element {
                 >
                     {isLoading ? (
                         <CircularProgress />
-                    ) : (
+                    ) : (appointments?.length || 0) > 0 ? (
                         appointments?.map((appointment) => (
                             <Box
                                 key={appointment.id}
@@ -66,7 +66,9 @@ function Appointments({ patient }: Props): JSX.Element {
                                 <BookedAppointment patientId={patient.id} appointment={appointment} notifyDeletedAppointment={notifyDeletedAppointment} />
                             </Box>
                         ))
-                    )}
+                    ) : (
+                        <Typography variant="caption">You have not booked any appointments yet.</Typography>
+                    ) }
                 </Box>
                 <HomeButton />
             </Card>

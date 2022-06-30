@@ -48,7 +48,7 @@ function Treatments({ patient }: Props): JSX.Element {
                 >
                     {isLoading ? (
                         <CircularProgress />
-                    ) : (
+                    ) : (treatmentsPerDate?.length || 0) > 0 ? (
                         treatmentsPerDate?.map((treatmentsGroup) => (
                             <Box maxWidth={"100%"} minWidth={"70%"}>
                                 <TreatmentsGroup key={(new Date(treatmentsGroup.date).toISOString())}
@@ -56,7 +56,10 @@ function Treatments({ patient }: Props): JSX.Element {
                                 />
                             </Box>
                         ))
+                    ) : (
+                        <Typography variant="caption">You have no assigned treatments yet.</Typography>
                     )}
+
                 </Box>
             <HomeButton />
             </Card>

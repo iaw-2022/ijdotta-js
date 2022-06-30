@@ -143,7 +143,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
                         variant="h5"
                         noWrap
                         component="a"
-                        href=""
+                        href={CONST.ROUTES.HOME}
                         sx={{
                             mr: 2,
                             display: { xs: "flex", md: "none" },

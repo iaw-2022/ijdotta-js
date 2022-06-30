@@ -10,7 +10,7 @@ const CONFIG = {
         CLIENT_ID: "fj7XSgg3r1adwGfYyHSKplYfQzou1E9r",
         AUDIENCE: "https://clinicapp/api",
         LOGOUT: {
-            REDIRECT_TO: "http://localhost:3000/"
+            REDIRECT_TO: process.env.LOGOUT_REDIRECT_TO || "https://clinicapp-react.herokuapp.com" // || "http://localhost:3000/"
         }
     }
 }

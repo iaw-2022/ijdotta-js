@@ -13,10 +13,12 @@ import { useState } from "react";
 import ConfirmCancelDialog from "./ConfirmCancelDialog";
 import { useAuth0 } from "@auth0/auth0-react";
 interface Props {
+    patientId: number;
     appointment: Appointment;
+    notifyDeletedAppointment: (id: number) => void
 }
 
-function BookedAppointment({ appointment }: Props): JSX.Element {
+function BookedAppointment({ patientId, appointment, notifyDeletedAppointment }: Props): JSX.Element {
     const { id, date, initial_time, doctor_id } = appointment;
 
     const { getAccessTokenSilently } = useAuth0();
@@ -35,7 +37,8 @@ function BookedAppointment({ appointment }: Props): JSX.Element {
     const handleCancel = async () => {
         setIsCancelling(true);
         const accessToken = await getAccessTokenSilently();
-        await model.cancelAppointment(id, accessToken);
+        await model.cancelAppointment(patientId, id, accessToken);
+        notifyDeletedAppointment(id);
         setIsCancelling(false);
     };
 

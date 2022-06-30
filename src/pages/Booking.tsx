@@ -9,6 +9,7 @@ import { Appointment } from "../types/appointments";
 import Route from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Patient } from "../types/patient";
+import model from "../model/model";
 
 const NONE_APPOINTMENT: Appointment = {
     id: 0,
@@ -31,8 +32,12 @@ function Booking({patient} : Props): JSX.Element {
     const { isAuthenticated } = useAuth0();
 
     useEffect(() => {
-        if (step === 0 && isAuthenticated && patientId !== 0) {
-            setStep(2);
+
+        if (step === 0 && isAuthenticated) {
+            model.checkPatientExists(patientId)
+                .then((exists) => {
+                    if (exists) setStep(2);
+                })
         }
     }, [step, isAuthenticated, patientId]);
 

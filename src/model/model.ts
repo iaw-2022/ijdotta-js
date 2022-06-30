@@ -23,6 +23,7 @@ interface Model {
         accessToken: string
     ) => Promise<Array<Appointment>>;
     cancelAppointment: (
+        patientId: number,
         appointmentId: number,
         accessToken: string
     ) => Promise<boolean>;
@@ -111,11 +112,13 @@ class ModelImpl implements Model {
     }
 
     async cancelAppointment(
+        patientId: number,
         appointmentId: number,
         accessToken: string
     ): Promise<boolean> {
         try {
             return await ClinicAPI.cancelAppointment(
+                patientId,
                 appointmentId,
                 accessToken
             );

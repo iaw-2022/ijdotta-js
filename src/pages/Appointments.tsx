@@ -18,7 +18,7 @@ interface Props {
 }
 
 function Appointments({ patient }: Props): JSX.Element {
-    const [appointments, setAppointments] = useState<Array<Appointment>>();
+    const [appointments, setAppointments] = useState<Array<Appointment>>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { getAccessTokenSilently } = useAuth0();
 
@@ -26,7 +26,7 @@ function Appointments({ patient }: Props): JSX.Element {
         const getAppointments = async () => {
             const accessToken = await getAccessTokenSilently();
             const appointments = await model.getPatientAppointments(
-                42631354, // patient.id,
+                patient.id,
                 accessToken
             );
             setAppointments(appointments);
@@ -36,6 +36,12 @@ function Appointments({ patient }: Props): JSX.Element {
         setIsLoading(true);
         getAppointments();
     }, [getAccessTokenSilently, patient.id]);
+
+    const notifyDeletedAppointment = (id: number) => {
+        setAppointments((appointments) => {
+            return appointments?.filter((appointment) => appointment.id !== id)
+        })
+    }
 
     return (
         <Container sx={{ mt: "20px" }}>
@@ -57,7 +63,7 @@ function Appointments({ patient }: Props): JSX.Element {
                                 maxWidth={"90%"}
                                 minWidth={"50%"}
                             >
-                                <BookedAppointment appointment={appointment} />
+                                <BookedAppointment patientId={patient.id} appointment={appointment} notifyDeletedAppointment={notifyDeletedAppointment} />
                             </Box>
                         ))
                     )}

@@ -25,11 +25,11 @@ const StyledLink = styled(Link)`
 interface Props {
     links: Record<string, string>[];
     protectedLinks: Record<string, string>[];
-    setPatient: (patient: Patient) => void;
+    patientExists: boolean;
 }
 
-function Home({ links, protectedLinks, setPatient }: Props): JSX.Element {
-    const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+function Home({ links, protectedLinks, patientExists }: Props): JSX.Element {
+    const { isAuthenticated, user } = useAuth0();
 
     return (
         <Container sx={{ padding: "20px" }}>
@@ -77,7 +77,9 @@ function Home({ links, protectedLinks, setPatient }: Props): JSX.Element {
                                 ? "Or manage personal data"
                                 : "Or log in to manage personal data"}
                         </Typography>
-                        {isAuthenticated && user?.email_verified ? (
+                        {isAuthenticated &&
+                        user?.email_verified &&
+                        patientExists ? (
                             protectedLinks.map(({ label, link }) => {
                                 return (
                                     <StyledLink key={link} to={link}>
@@ -87,10 +89,17 @@ function Home({ links, protectedLinks, setPatient }: Props): JSX.Element {
                                     </StyledLink>
                                 );
                             })
-                        ) : isAuthenticated ? (
+                        ) : isAuthenticated && !user?.email_verified ? (
                             <Alert severity="warning">
                                 <Typography>
                                     Remember to verify your email.
+                                </Typography>
+                            </Alert>
+                        ) : isAuthenticated && !patientExists ? (
+                            <Alert severity="warning">
+                                <Typography>
+                                    First you need to book an appointment to get
+                                    yor patient profile created.
                                 </Typography>
                             </Alert>
                         ) : (

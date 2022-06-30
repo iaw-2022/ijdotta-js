@@ -46,8 +46,8 @@ function Filters({ setTo, setFrom, setDoctor, isLoading, setIsLoading }: Props):
 
     const initialValues = {
         doctor: ANY_DOCTOR.id,
-        from: new Date(),
-        to: new Date(),
+        from: new Date(0),
+        to: new Date(2029, 1, 1),
     };
 
     const onSubmit = (

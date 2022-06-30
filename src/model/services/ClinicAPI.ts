@@ -103,10 +103,11 @@ class ClinicService {
     }
 
     async cancelAppointment(
+        patient_id: number,
         appointment_id: number,
         accessToken: string
     ): Promise<boolean> {
-        const url = `/appointments/${appointment_id}`;
+        const url = `/patients/${patient_id}/appointments/${appointment_id}`;
         const config: AxiosRequestConfig = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,

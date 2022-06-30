@@ -25,6 +25,7 @@ const DUMMY_PATIENT: Patient = {
 
 function App() {
     const [patient, setPatient] = useState<Patient>(DUMMY_PATIENT);
+    const [patientExists, setPatientExists] = useState(false);
 
     const links = [{ label: "Book appointment", link: "/booking" }];
 
@@ -37,8 +38,6 @@ function App() {
     const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
-        console.log("Applying effect: is auth: " + isAuthenticated);
-
         const tryToGetPatient = async () => {
             const email = user?.email;
             if (email !== undefined) {
@@ -49,8 +48,7 @@ function App() {
                     accessToken
                 );
                 setPatient(patient);
-                console.log("set pattient: ");
-                console.log(patient);
+                setPatientExists(true);
             }
         };
 
@@ -67,7 +65,7 @@ function App() {
                         <Home
                             links={links}
                             protectedLinks={protectedLinks}
-                            setPatient={setPatient}
+                            patientExists={patientExists}
                         />
                     }
                 />

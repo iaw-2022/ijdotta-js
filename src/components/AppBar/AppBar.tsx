@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import CONST from "../../const";
 import { useAuth0 } from "@auth0/auth0-react";
+import CONFIG from "../../config";
 
 interface Props {
     links: Record<string, string>[];
@@ -54,7 +55,7 @@ const ResponsiveAppBar = ({ links }: Props) => {
     const {logout, user} = useAuth0();
 
     const onClickLogout = () => {
-        logout()
+        logout({ returnTo: CONFIG.AUTH0.LOGOUT.REDIRECT_TO })
     }
 
     return (

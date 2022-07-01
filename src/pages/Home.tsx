@@ -19,6 +19,7 @@ const StyledLink = styled(Link)`
     text-decoration: None;
     width: 100%;
     height: 100%;
+    display: contents;
 `;
 
 interface Props {

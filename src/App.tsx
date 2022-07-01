@@ -64,6 +64,7 @@ function App() {
                             links={links}
                             protectedLinks={protectedLinks}
                             patientExists={patientExists}
+                            patient={patient}
                         />
                     }
                 />

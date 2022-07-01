@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import LoginButton from "../components/LoginButton/LoginButton";
 import styled from "@emotion/styled";
 import LogoutButton from "../components/LogoutButton/LogoutButton";
+import { Patient } from "../types/patient";
 
 const StyledLink = styled(Link)`
     color: White;
@@ -23,16 +24,17 @@ interface Props {
     links: Record<string, string>[];
     protectedLinks: Record<string, string>[];
     patientExists: boolean;
+    patient: Patient;
 }
 
-function Home({ links, protectedLinks, patientExists }: Props): JSX.Element {
+function Home({ links, protectedLinks, patientExists, patient }: Props): JSX.Element {
     const { isAuthenticated, user } = useAuth0();
 
     return (
         <Container sx={{ padding: "20px" }}>
             <Card sx={{ padding: "20px" }}>
                 <Typography variant="h3">
-                    Welcome{isAuthenticated && ", " + user?.name}
+                    Welcome{isAuthenticated && patientExists && `, ${patient.name}`}
                 </Typography>
                 <Grid container padding="20px" spacing={2}>
                     <Grid

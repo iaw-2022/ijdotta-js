@@ -20,9 +20,10 @@ const NONE_APPOINTMENT: Appointment = {
 
 interface Props {
     patient: Patient
+    setPatientExists: (exists: boolean) => void
 }
 
-function Booking({patient} : Props): JSX.Element {
+function Booking({patient, setPatientExists} : Props): JSX.Element {
     const [patientId, setPatientId] = useState<number>(patient.id);
     const [appointment, setAppointment] =
         useState<Appointment>(NONE_APPOINTMENT);
@@ -59,6 +60,7 @@ function Booking({patient} : Props): JSX.Element {
         patientId,
         handleNextClick,
         setPatientId,
+        setPatientExists,
     };
 
     const appointmentBookingCalendarProps = {

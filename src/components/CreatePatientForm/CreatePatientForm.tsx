@@ -25,6 +25,7 @@ interface Props {
     patientId: number;
     handleNextClick: () => void;
     setPatientId: (id: number) => void;
+    setPatientExists: (exists: boolean) => void;
 }
 
 interface Values {
@@ -53,6 +54,7 @@ function CreatePatientForm({
     patientId,
     setPatientId,
     handleNextClick,
+    setPatientExists
 }: Props): JSX.Element {
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(true);
@@ -71,6 +73,7 @@ function CreatePatientForm({
         setHasSubmitted(true);
         if (await model.createPatient(patient)) {
             setPatientId(patient.id);
+            setPatientExists(true)
             setSuccess(true);
 
             handleNextClick();

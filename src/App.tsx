@@ -24,6 +24,7 @@ const DUMMY_PATIENT: Patient = {
 function App() {
     const [patient, setPatient] = useState<Patient>(DUMMY_PATIENT);
     const [patientExists, setPatientExists] = useState(false);
+    const [isLoadingPatient, setIsLoadingPatient] = useState(false);
 
     const links = [{ label: "Book appointment", link: "/booking" }];
 
@@ -37,21 +38,33 @@ function App() {
 
     useEffect(() => {
         const tryToGetPatient = async () => {
+            setIsLoadingPatient(true);
             const email = user?.email;
             if (email !== undefined) {
                 const patientId = await model.getPatientIdGivenEmail(email);
-                const accessToken = await getAccessTokenSilently();
-                const patient = await model.getPatientProfile(
-                    patientId,
-                    accessToken
-                );
-                setPatient(patient);
-                setPatientExists(true);
+                if (patientId === 0) {
+                    setPatientExists(false);
+                } else {
+                    const accessToken = await getAccessTokenSilently();
+                    const patient = await model.getPatientProfile(
+                        patientId,
+                        accessToken
+                    );
+                    setPatient(patient);
+                    setPatientExists(true);
+                }
             }
+            setIsLoadingPatient(false);
         };
 
         tryToGetPatient();
-    }, [getAccessTokenSilently, isAuthenticated, user?.email, user]);
+    }, [
+        getAccessTokenSilently,
+        isAuthenticated,
+        user?.email,
+        user,
+        patientExists,
+    ]);
 
     return (
         <BrowserRouter>
@@ -65,12 +78,18 @@ function App() {
                             protectedLinks={protectedLinks}
                             patientExists={patientExists}
                             patient={patient}
+                            isLoadingPatient={isLoadingPatient}
                         />
                     }
                 />
                 <Route
                     path="/booking"
-                    element={<Booking patient={patient} />}
+                    element={
+                        <Booking
+                            patient={patient}
+                            setPatientExists={setPatientExists}
+                        />
+                    }
                 />
                 <Route
                     path="/appointments"

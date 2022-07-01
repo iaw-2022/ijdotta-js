@@ -56,12 +56,8 @@ class ClinicService {
         from && (params.from = from);
         to && (params.to = to);
 
-        console.log("params: ");
-        console.log(params);
-
         try {
             const response = await APIClient.get(url, { params });
-            console.log(response.data);
             return response.data;
         } catch (error: any) {
             throw buildError(error);
@@ -78,22 +74,16 @@ class ClinicService {
             patient_id: Number(patient_id),
         };
 
-        console.log("Booking: " + url + "  " + patient_id);
-
         try {
             const response = await APIClient.put(url, data);
-            console.log(response);
             return response.data;
         } catch (error: any) {
-            console.log(error);
             throw buildError(error);
         }
     }
 
     async createPatient(patient: Patient): Promise<boolean> {
         const url = `/patients`;
-        console.log("has reached ClinicAPI.createPatient");
-
         try {
             const response = await APIClient.post(url, {
                 health_insurance_id: patient.healthInsuranceId,
@@ -139,7 +129,6 @@ class ClinicService {
 
         try {
             const response = await APIClient.get(url, config);
-            console.log(response.data);
             return response.data;
         } catch (error: any) {
             throw buildError(error);

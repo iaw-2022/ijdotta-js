@@ -6,6 +6,7 @@ import {
     Typography,
     Grid,
     Alert,
+    CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import LoginButton from "../components/LoginButton/LoginButton";
@@ -25,16 +26,24 @@ interface Props {
     protectedLinks: Record<string, string>[];
     patientExists: boolean;
     patient: Patient;
+    isLoadingPatient: boolean;
 }
 
-function Home({ links, protectedLinks, patientExists, patient }: Props): JSX.Element {
+function Home({
+    links,
+    protectedLinks,
+    patientExists,
+    patient,
+    isLoadingPatient,
+}: Props): JSX.Element {
     const { isAuthenticated, user } = useAuth0();
 
     return (
         <Container sx={{ padding: "20px" }}>
             <Card sx={{ padding: "20px" }}>
                 <Typography variant="h3">
-                    Welcome{isAuthenticated && patientExists && `, ${patient.name}`}
+                    Welcome
+                    {isAuthenticated && patientExists && `, ${patient.name}`}
                 </Typography>
                 <Grid container padding="20px" spacing={2}>
                     <Grid
@@ -76,9 +85,11 @@ function Home({ links, protectedLinks, patientExists, patient }: Props): JSX.Ele
                                 ? "Or manage personal data"
                                 : "Or log in to manage personal data"}
                         </Typography>
-                        {isAuthenticated &&
-                        user?.email_verified &&
-                        patientExists ? (
+                        {isLoadingPatient ? (
+                            <CircularProgress />
+                        ) : isAuthenticated &&
+                          user?.email_verified &&
+                          patientExists ? (
                             protectedLinks.map(({ label, link }) => {
                                 return (
                                     <StyledLink key={link} to={link}>

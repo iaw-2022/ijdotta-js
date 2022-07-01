@@ -162,7 +162,7 @@ class ModelImpl implements Model {
 
     async getPatientIdGivenEmail(email: string): Promise<number> {
         try {
-            return ClinicAPI.getPatientIdGivenEmail(email);
+            return await ClinicAPI.getPatientIdGivenEmail(email);
         } catch (error) {
             return 0;
         }

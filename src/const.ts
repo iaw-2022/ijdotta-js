@@ -6,6 +6,7 @@ const CONST = {
         BOOKING: '/booking',
         PROFILE: '/profile',
         APPOINTMENTS: '/appointments',
+        TREATMENTS: '/treatments',
     }
 }
 

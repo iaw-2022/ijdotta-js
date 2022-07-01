@@ -14,6 +14,9 @@ import Profile from "./pages/Profile";
 import { useAuth0 } from "@auth0/auth0-react";
 import model from "./model/model";
 
+import CONST from "./const";
+const { ROUTES } = CONST;
+
 const DUMMY_PATIENT: Patient = {
     id: 0,
     name: "Pedro",
@@ -26,12 +29,12 @@ function App() {
     const [patientExists, setPatientExists] = useState(false);
     const [isLoadingPatient, setIsLoadingPatient] = useState(false);
 
-    const links = [{ label: "Book appointment", link: "/booking" }];
+    const links = [{ label: "Book appointment", link: ROUTES.BOOKING }];
 
     const protectedLinks = [
-        { label: "Profile", link: "/profile" },
-        { label: "Booked appointments", link: "/appointments" },
-        { label: "Treatments", link: "/treatments" },
+        { label: "Profile", link: ROUTES.PROFILE },
+        { label: "Booked appointments", link: ROUTES.APPOINTMENTS },
+        { label: "Treatments", link: ROUTES.TREATMENTS },
     ];
 
     const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();

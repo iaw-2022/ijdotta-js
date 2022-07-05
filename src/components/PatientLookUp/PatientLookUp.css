@@ -1,0 +1,15 @@
+.main-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.auto-width {
+    width: fit-content;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+}
